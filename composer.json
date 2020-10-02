@@ -1,0 +1,22 @@
+{
+    "name": "enchainte/phpsdk",
+    "description": "PHP implementation for enchainte SDK",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Alex Ripoll",
+            "email": "aripoll@enchainte.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Enchainte\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Enchainte\\Tests\\": "tests/"
+        }
+    }
+}
