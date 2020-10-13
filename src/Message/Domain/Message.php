@@ -1,8 +1,8 @@
 <?php
 
-namespace Enchainte\Shared\Domain;
+namespace Enchainte\Message\Domain;
 
-use Enchainte\Shared\Domain\Exception\InvalidMessageException;
+use Enchainte\Message\Domain\Exception\InvalidMessageException;
 use Enchainte\Shared\Infrastructure\Hashing\Blake2b;
 use InvalidArgumentException;
 
@@ -16,21 +16,24 @@ final class Message
     private $hash;
     private $hashAlgorithm;
 
-    public function __construct($hash)
+    public function __construct(string $hash)
     {
+        // TODO decouple
         $this->hashAlgorithm = new Blake2b();
 
-        switch ($hash){
-            case is_string($hash):
-                $this->hash = $this->fromString($hash);
-                break;
-            case $this->isHex($hash);
-                $this->hash = $this->fromHex($hash);
-                break;
-            default:
-//                $this->hash = $this->from($hash);
-                throw new InvalidArgumentException("invalid argument type");
-        }
+//        switch ($hash){
+//            case is_string($hash):
+//                $this->hash = $this->fromString($hash);
+//                break;
+//            case $this->isHex($hash);
+//                $this->hash = $this->fromHex($hash);
+//                break;
+//            default:
+////                $this->hash = $this->from($hash);
+//                throw new InvalidArgumentException("invalid argument type");
+//        }
+        $this->hash = $this->fromHex($hash);
+
     }
 
     public function hash(): string
@@ -57,8 +60,8 @@ final class Message
 
     private function fromHex(string $hash): string
     {
-        $bytes = array_map('hexdec', str_split($hash, 2));
-        return $this->hashAlgorithm->hash($bytes);
+//        $bytes = array_map('hexdec', str_split($hash, 2));
+        return $this->hashAlgorithm->hash($hash);
     }
 
     private function fromString(string $hash): string

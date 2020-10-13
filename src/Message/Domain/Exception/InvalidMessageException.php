@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Enchainte\Shared\Domain\Exception;
+namespace Enchainte\Message\Domain\Exception;
 
 use InvalidArgumentException;
 

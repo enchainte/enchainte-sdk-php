@@ -2,8 +2,8 @@
 
 namespace Enchainte\Shared\Infrastructure\Hashing;
 
-use Enchainte\Shared\Domain\HashAlgorithm;
 use deemru\Blake2b as deemruBlake2b;
+use Enchainte\Shared\Domain\HashAlgorithm;
 
 final class Blake2b implements HashAlgorithm
 {

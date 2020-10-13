@@ -2,10 +2,9 @@
 
 namespace Enchainte\Message\Application\Find;
 
-
 use Enchainte\Shared\Application\Config;
 use Enchainte\Shared\Application\HttpClient;
-use Enchainte\Shared\Domain\Message;
+use Enchainte\Message\Domain\Message;
 
 final class Finder
 {

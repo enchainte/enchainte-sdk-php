@@ -4,7 +4,7 @@ namespace Enchainte\Shared\Application;
 
 use InvalidArgumentException;
 
-final class Config
+class Config
 {
     // TODO get from params or .env
     const SIGNED_HEADERS = 'x-ms-date;host;x-ms-content-sha256';

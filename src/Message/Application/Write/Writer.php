@@ -3,9 +3,9 @@
 namespace Enchainte\Message\Application\Write;
 
 use Enchainte\Shared\Application\Config;
-use Enchainte\Shared\Domain\Deferred;
+use Enchainte\Message\Domain\Deferred;
 use Enchainte\Shared\Application\HttpClient;
-use Enchainte\Shared\Domain\Message;
+use Enchainte\Message\Domain\Message;
 
 final class Writer
 {

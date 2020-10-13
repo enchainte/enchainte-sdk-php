@@ -1,6 +1,6 @@
 <?php
 
-namespace Enchainte\Shared\Domain;
+namespace Enchainte\Message\Domain;
 
 
 final class Deferred

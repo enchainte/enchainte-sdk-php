@@ -18,11 +18,8 @@ final class Verifier
 
     public function verifyMessages(array $messages, string $token): bool
     {
-        // call getProof
         $proof = $this->proofFinder->getProof($messages, $token);
-        // call verifier to check if proof is Valid
+
         return $this->proofVerifier->verifyProof($proof->leaves(), $proof->nodes(), $proof->depth(), $proof->bitmap());
-        // || UNNECESSARY || call validateRoot from Web3
-        // || UNNECESSARY || If both executions return true, the proof is valid, otherwise, it’s not.
     }
 }

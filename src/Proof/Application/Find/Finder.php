@@ -3,7 +3,7 @@
 namespace Enchainte\Proof\Application\Find;
 
 use Enchainte\Shared\Application\Config;
-use Enchainte\Shared\Domain\Message;
+use Enchainte\Message\Domain\Message;
 use Enchainte\Proof\Domain\Proof;
 use Enchainte\Shared\Application\HttpClient;
 
@@ -40,6 +40,7 @@ final class Finder
         ];
         $data = json_encode(["hashes" => $hash]);
         $response = $this->httpClient->post($url, $headers, $data);
+        $response = json_decode($response, true);
 
         return new Proof($response["messages"], $response["nodes"], $response["depth"], $response["bitmap"]);
     }

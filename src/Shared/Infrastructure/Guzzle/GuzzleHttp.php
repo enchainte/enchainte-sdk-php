@@ -2,7 +2,6 @@
 
 namespace Enchainte\Shared\Infrastructure\Guzzle;
 
-
 use Enchainte\Shared\Application\HttpClient;
 use GuzzleHttp\Client;
 
@@ -15,19 +14,12 @@ final class GuzzleHttp implements HttpClient
         $this->client = new Client();
     }
 
-    public function post(string $url, array $headers, string $data): bool
+    public function post(string $url, array $headers, string $data)
     {
-        $response = $this->client->request("POST", $url, [
+        return $this->client->request("POST", $url, [
             "headers" => $headers,
             "json" => $data
         ]);
-
-        // Return true if success else false
-        // TODO ask what does response return
-        if ($response != ok){
-            return false;
-        }
-        return true;
     }
 
     public function get(string $url, array $headers): array
