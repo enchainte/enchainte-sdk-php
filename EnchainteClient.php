@@ -36,7 +36,7 @@ final class EnchainteClient
 
         $this->findMessageService = new MessageFinder($httpClient, $sdkConfig);
         $this->verifyMessageService = new MessageVerifier($this->findProofService, $this->verifyProofService);
-        $this->writerMessageService = new Writer($httpClient);
+        $this->writerMessageService = new Writer($httpClient, $sdkConfig);
     }
     // TODO WaitMessageReceipt
 
