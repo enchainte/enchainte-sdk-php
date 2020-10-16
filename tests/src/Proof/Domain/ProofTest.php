@@ -3,6 +3,8 @@
 namespace Enchainte\Tests\src\Proof\Domain;
 
 use Enchainte\Proof\Domain\Proof;
+use Enchainte\Shared\Domain\HashAlgorithm;
+use Enchainte\Shared\Infrastructure\Hashing\Blake2b;
 use PHPUnit\Framework\TestCase;
 
 final class ProofTest extends TestCase
@@ -10,7 +12,15 @@ final class ProofTest extends TestCase
     /** @test */
     public function it_should_successfully_create_a_Proof_instance(): void
     {
-        $proof = new Proof([], [], "depth", "bitmap");
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
+
+        $proof = new Proof(
+            ['5ac706bdef87529b22c08646b74cb98baf310a46bd21ee420814b04c71fa42b1'],
+            ['95be11f4984e0b6e15f100e4eb4476d54a716f47bfdbd606f85367f3867e9836'],
+            "02080c0d1012141413110f0e0b0a0907060504030100",
+            "020000",
+            $hashAlgorithm
+        );
 
         $this->assertInstanceOf(Proof::class, $proof);
     }
@@ -18,6 +28,8 @@ final class ProofTest extends TestCase
     /** @test */
     public function it_should_return_all_the_properties_values(): void
     {
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
+
         $leaves = [
             '5ac706bdef87529b22c08646b74cb98baf310a46bd21ee420814b04c71fa42b1',
             '5cd53f8367e1892c4f25dc9b5ddf28c7a1a27f489336a9537a43555819e4f434',
@@ -30,7 +42,7 @@ final class ProofTest extends TestCase
         $depth = "02080c0d1012141413110f0e0b0a0907060504030100";
         $bitmap = "020000";
 
-        $proof = new Proof($leaves, $nodes, $depth, $bitmap);
+        $proof = new Proof($leaves, $nodes, $depth, $bitmap, $hashAlgorithm);
 
         $this->assertEquals($proof->leaves(), $leaves);
         $this->assertEquals($proof->nodes(), $nodes);
@@ -41,6 +53,8 @@ final class ProofTest extends TestCase
     /** @test */
     public function it_should_return_all_the_properties_values_in_bytes_format(): void
     {
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
+
         $leaves = [
             '5ac706bdef87529b22c08646b74cb98baf310a46bd21ee420814b04c71fa42b1',
             '5cd53f8367e1892c4f25dc9b5ddf28c7a1a27f489336a9537a43555819e4f434',
@@ -76,7 +90,7 @@ final class ProofTest extends TestCase
         $depthBytes = [2, 8, 12, 13, 16, 18, 20, 20, 19, 17, 15, 14, 11, 10, 9, 7, 6, 5, 4, 3, 1, 0];
         $bitmapBytes = [2, 0, 0];
 
-        $proof = new Proof($leaves, $nodes, $depth, $bitmap);
+        $proof = new Proof($leaves, $nodes, $depth, $bitmap, $hashAlgorithm);
 
         $this->assertEquals($proof->leavesBytes(), $leavesBytes);
         $this->assertEquals($proof->nodesBytes(), $nodesBytes);
@@ -87,6 +101,8 @@ final class ProofTest extends TestCase
     /** @test */
     public function it_should_merge_two_leaves_and_create_a_hash_of_them_and_return_it_in_bytes_format(): void
     {
+        $hashAlgorithm = new Blake2b();
+
         $leaves = [
             '5ac706bdef87529b22c08646b74cb98baf310a46bd21ee420814b04c71fa42b1',
             '5cd53f8367e1892c4f25dc9b5ddf28c7a1a27f489336a9537a43555819e4f434',
@@ -99,7 +115,7 @@ final class ProofTest extends TestCase
         $depth = "02080c0d1012141413110f0e0b0a0907060504030100";
         $bitmap = "020000";
 
-        $proof = new Proof($leaves, $nodes, $depth, $bitmap);
+        $proof = new Proof($leaves, $nodes, $depth, $bitmap, $hashAlgorithm);
 
         $leave1 = [
             130, 170, 231, 232, 110, 181, 31, 97, 166, 32, 131, 19, 32, 71, 93, 157, 97, 203, 213, 39, 73, 219, 241, 143, 169, 66, 177, 185, 127, 80, 174, 233,
@@ -114,6 +130,7 @@ final class ProofTest extends TestCase
         ];
 
         $result = $proof->mergeLeavesAndHash($leave1, $leave2);
+
         $this->assertEquals($expectedResult, $result);
     }
 

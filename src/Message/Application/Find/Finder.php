@@ -5,6 +5,7 @@ namespace Enchainte\Message\Application\Find;
 use Enchainte\Shared\Application\Config;
 use Enchainte\Shared\Application\HttpClient;
 use Enchainte\Message\Domain\Message;
+use Enchainte\Shared\Domain\HashAlgorithm;
 
 final class Finder
 {
@@ -13,11 +14,13 @@ final class Finder
 
     private $httpClient;
     private $config;
+    private $hashAlgorithm;
 
-    public function __construct(HttpClient $httpClient, Config $config)
+    public function __construct(HttpClient $httpClient, Config $config, HashAlgorithm $hashAlgorithm)
     {
         $this->httpClient = $httpClient;
         $this->config = $config;
+        $this->hashAlgorithm = $hashAlgorithm;
     }
 
     public function getMessages(array $messagesHash, string $token): MessageReceipt
@@ -26,7 +29,7 @@ final class Finder
         // validate each one with isValid() method
         $messages = [];
         foreach ($messagesHash as $hash) {
-            $messages[] = new Message($hash);
+            $messages[] = new Message($hash, $this->hashAlgorithm);
         }
         // stringify message array
         $messagesHash = [];

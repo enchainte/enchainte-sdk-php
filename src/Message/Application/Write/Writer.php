@@ -2,10 +2,14 @@
 
 namespace Enchainte\Message\Application\Write;
 
+use Amp\Coroutine;
+use Amp\Loop;
 use Enchainte\Shared\Application\Config;
 use Enchainte\Message\Domain\Deferred;
 use Enchainte\Shared\Application\HttpClient;
 use Enchainte\Message\Domain\Message;
+use Enchainte\Shared\Domain\HashAlgorithm;
+use Spatie\Async\Pool;
 
 final class Writer
 {
@@ -18,30 +22,33 @@ final class Writer
 
     // TODO singleton
     // TODO send every x time
+    private $hashAlgorithm;
 
-    public function __construct(HttpClient $httpClient, Config $config)
+    public function __construct(HttpClient $httpClient, Config $config, HashAlgorithm $hashAlgorithm)
     {
         $this->httpClient = $httpClient;
         $this->config = $config;
+        $this->hashAlgorithm = $hashAlgorithm;
+
+        // TODO find a way for asynchronism
+
     }
 
     public function sendMessage(string $message, callable $resolve, callable $reject, string $token): bool
     {
-        $message = new Message($message);
-
-        $ok = $this->push($message, $resolve, $reject);
-
-        // TODO resolve one thread problem
+        $message = new Message($message, $this->hashAlgorithm);
+        $this->push($message, $resolve, $reject);
+        $this->send($token);
     }
 
-    private function push(Message $message, callable $resolve, callable $reject): bool
+    private function push(Message $message, callable $resolve, callable $reject): void
     {
         $deferred = new Deferred($resolve, $reject);
         $this->tasks[$message->hash()] = $deferred;
         // Return the Promise-like callback from the getPromise Deferred method
     }
 
-    // http request
+
     private function send(string $token): void
     {
         // Check if there are any messages in the tasks map attribute. If not, don’t do anything else
@@ -68,10 +75,12 @@ final class Writer
             // Create new Message with messages array as argument
             $data = json_encode(["hashes" => $hashes]);
             // Execute the write method of the API Service.
-            $response = $this->httpClient->post($data);
+            $response = $this->httpClient->post($url, $headers, $data);
+            $response = json_decode($response, true);
             // Execute the callback for every Deferred entity sent (resolve if the write was successful or reject otherwise).
             foreach ($currentTasks as $deferred) {
-                if ($response === true) {
+                if ($response["success"] === "true") {
+                // TODO call_user_func??
                     $deferred->resolve();
                 } else {
                     $deferred->reject();

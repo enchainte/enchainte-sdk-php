@@ -12,7 +12,9 @@
         "guzzlehttp/guzzle": "^6.5.5",
         "deemru/blake2b": "^1.0",
         "sc0vu/web3.php": "dev-master",
-        "phpunit/phpunit": "^9.4"
+        "phpunit/phpunit": "^9.4",
+        "amphp/amp": "^2.5",
+        "spatie/async": "^1.5"
     },
     "autoload": {
         "psr-4": {

@@ -3,6 +3,7 @@
 namespace Enchainte\Tests\src\Proof\Application\Verify;
 
 use Enchainte\Proof\Application\Verify\Verifier;
+use Enchainte\Shared\Domain\HashAlgorithm;
 use Enchainte\Tests\src\Shared\Infrastructure\Web3\Web3SuccessfulValidationStub;
 use Enchainte\Tests\src\Shared\Infrastructure\Web3\Web3UnsuccessfulValidationStub;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +37,9 @@ class VerifierTest extends TestCase
     public function it_should_return_true_when_the_Proof_root_is_correct(): void
     {
         $blockchainClient = new Web3SuccessfulValidationStub();
-        $verifier = new Verifier($blockchainClient);
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
+
+        $verifier = new Verifier($blockchainClient, $hashAlgorithm);
         $result = $verifier->verifyProof(
             self::LEAVES_VALUES,
             self::NODES_VALUES,
@@ -51,7 +54,9 @@ class VerifierTest extends TestCase
     public function it_should_return_false_when_the_Proof_root_is_not_correct(): void
     {
         $blockchainClient = new Web3UnsuccessfulValidationStub();
-        $verifier = new Verifier($blockchainClient);
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
+
+        $verifier = new Verifier($blockchainClient, $hashAlgorithm);
         $result = $verifier->verifyProof(
             self::LEAVES_VALUES,
             self::NODES_VALUES,

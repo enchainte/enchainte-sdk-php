@@ -2,8 +2,7 @@
 
 namespace Enchainte\Proof\Domain;
 
-
-use Enchainte\Shared\Infrastructure\Hashing\Blake2b;
+use Enchainte\Shared\Domain\HashAlgorithm;
 
 final class Proof
 {
@@ -13,14 +12,14 @@ final class Proof
     private $bitmap;
     private $hashAlgorithm;
 
-    public function __construct(array $leaves, array $nodes, string $depth, string $bitmap)
+    public function __construct(array $leaves, array $nodes, string $depth, string $bitmap, HashAlgorithm $hashAlgorithm)
     {
         $this->leaves = $leaves;
         $this->nodes = $nodes;
         $this->depth = $depth;
         $this->bitmap = $bitmap;
 
-        $this->hashAlgorithm = new Blake2b();
+        $this->hashAlgorithm = $hashAlgorithm;
     }
 
     public function leaves(): array

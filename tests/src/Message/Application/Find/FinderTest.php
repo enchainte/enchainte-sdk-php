@@ -7,6 +7,7 @@ namespace Enchainte\Tests\src\Message\Application\Find;
 use Enchainte\Message\Application\Find\Finder;
 use Enchainte\Message\Application\Find\MessageReceipt;
 use Enchainte\Shared\Application\Config;
+use Enchainte\Shared\Domain\HashAlgorithm;
 use Enchainte\Tests\src\Shared\Infrastructure\Guzzle\GuzzleHttpMessageReceiptStub;
 use PHPUnit\Framework\TestCase;
 
@@ -20,13 +21,13 @@ final class FinderTest extends TestCase
     {
         $httpClient = new GuzzleHttpMessageReceiptStub();
         $config = $this->createMock(Config::class);
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
 
-        $messageFinder = new Finder($httpClient, $config);
+        $messageFinder = new Finder($httpClient, $config, $hashAlgorithm);
 
         $messageReceipt = $messageFinder->getMessages([], self::TOKEN);
 
         $this->assertInstanceOf(MessageReceipt::class, $messageReceipt);
     }
-
 
 }

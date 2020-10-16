@@ -5,13 +5,14 @@ namespace Enchainte\Tests\src\Message\Application\Verify;
 use Enchainte\Message\Application\Verify\Verifier;
 use Enchainte\Proof\Application\Find\Finder;
 use Enchainte\Shared\Application\Config;
+use Enchainte\Shared\Domain\HashAlgorithm;
 use Enchainte\Tests\src\Shared\Infrastructure\Guzzle\GuzzleHttpProofStub;
 use Enchainte\Tests\src\Shared\Infrastructure\Web3\Web3SuccessfulValidationStub;
 use Enchainte\Tests\src\Shared\Infrastructure\Web3\Web3UnsuccessfulValidationStub;
 use PHPUnit\Framework\TestCase;
 use Enchainte\Proof\Application\Verify\Verifier as ProofVerifier;
 
-class VerifierTest extends TestCase
+final class VerifierTest extends TestCase
 {
     const TOKEN = "";
     // TODO change to bytes
@@ -22,11 +23,12 @@ class VerifierTest extends TestCase
     {
         $httpClient = new GuzzleHttpProofStub();
         $config = $this->createMock(Config::class);
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
 
-        $proofFinder = new Finder($httpClient, $config);
+        $proofFinder = new Finder($httpClient, $config, $hashAlgorithm);
 
         $blockchainClient = new Web3SuccessfulValidationStub();
-        $proofVerifier = new ProofVerifier($blockchainClient);
+        $proofVerifier = new ProofVerifier($blockchainClient, $hashAlgorithm);
 
         $messageVerifier = new Verifier($proofFinder, $proofVerifier);
 
@@ -38,11 +40,12 @@ class VerifierTest extends TestCase
     {
         $httpClient = new GuzzleHttpProofStub();
         $config = $this->createMock(Config::class);
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
 
-        $proofFinder = new Finder($httpClient, $config);
+        $proofFinder = new Finder($httpClient, $config, $hashAlgorithm);
 
         $blockchainClient = new Web3UnsuccessfulValidationStub();
-        $proofVerifier = new ProofVerifier($blockchainClient);
+        $proofVerifier = new ProofVerifier($blockchainClient, $hashAlgorithm);
 
         $messageVerifier = new Verifier($proofFinder, $proofVerifier);
 

@@ -7,6 +7,7 @@ namespace Enchainte\Tests\src\Proof\Application\Find;
 use Enchainte\Proof\Application\Find\Finder;
 use Enchainte\Proof\Domain\Proof;
 use Enchainte\Shared\Application\Config;
+use Enchainte\Shared\Domain\HashAlgorithm;
 use Enchainte\Tests\src\Shared\Infrastructure\Guzzle\GuzzleHttpProofStub;
 use PHPUnit\Framework\TestCase;
 
@@ -21,8 +22,9 @@ final class FinderTest extends TestCase
     {
         $httpClient = new GuzzleHttpProofStub();
         $config = $this->createMock(Config::class);
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
 
-        $proofProvider = new Finder($httpClient, $config);
+        $proofProvider = new Finder($httpClient, $config, $hashAlgorithm);
         $proof = $proofProvider->getProof(self::MESSAGES_DATA, self::TOKEN);
 
         $this->assertInstanceOf(Proof::class, $proof);

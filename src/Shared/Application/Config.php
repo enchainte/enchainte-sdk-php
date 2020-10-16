@@ -21,7 +21,7 @@ class Config
     public function __construct(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
-        $this->requestParams();
+//        $this->requestParams();
     }
 
     public function params(): array

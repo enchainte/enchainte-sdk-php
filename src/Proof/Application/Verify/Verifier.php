@@ -4,21 +4,24 @@ namespace Enchainte\Proof\Application\Verify;
 
 use Enchainte\Proof\Domain\Proof;
 use Enchainte\Shared\Application\BlockchainClient;
+use Enchainte\Shared\Domain\HashAlgorithm;
 
 final class Verifier
 {
     private $blockchainClient;
+    private $hashAlgorithm;
 
-    public function __construct(BlockchainClient $blockchainClient)
+    public function __construct(BlockchainClient $blockchainClient, HashAlgorithm $hashAlgorithm)
     {
         $this->blockchainClient = $blockchainClient;
+        $this->hashAlgorithm = $hashAlgorithm;
     }
 
     public function verifyProof(array $leaves, array $nodes, string $depth, string $bitmap): bool
     {
 
-        $root = $this->calculateRoot(new Proof($leaves, $nodes, $depth, $bitmap));
-        // TODO
+        $root = $this->calculateRoot(new Proof($leaves, $nodes, $depth, $bitmap, $this->hashAlgorithm));
+
         // Call validateRoot from Web3 Service with the root attribute of the proof
         return $this->blockchainClient->validateRoot($root);
         // If both executions return true, the proof is valid, otherwise, it’s not

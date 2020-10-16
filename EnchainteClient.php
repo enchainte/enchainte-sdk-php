@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__.'/vendor/autoload.php';
+
 use Enchainte\Message\Application\Find\MessageReceipt;
 use Enchainte\Message\Application\Verify\Verifier as MessageVerifier;
 use Enchainte\Message\Application\Write\Writer;
@@ -8,7 +10,9 @@ use Enchainte\Proof\Application\Verify\Verifier as ProofVerifier;
 use Enchainte\Message\Application\Find\Finder as MessageFinder;
 use Enchainte\Proof\Domain\Proof;
 use Enchainte\Shared\Application\Config;
+use Enchainte\Shared\Infrastructure\Blockchain\Web3;
 use Enchainte\Shared\Infrastructure\Guzzle\GuzzleHttp;
+use Enchainte\Shared\Infrastructure\Hashing\Blake2b;
 
 final class EnchainteClient
 {
@@ -25,27 +29,28 @@ final class EnchainteClient
 
         // Add dependencies
         $httpClient = new GuzzleHttp();
-        // TODO decouple Hashing library
+        $hashAlgorithm = new Blake2b();
 
         // Get config params
         $sdkConfig = new Config($httpClient);
 
+        $blockchainClient = new Web3($sdkConfig);
+
         // Add all service
-        $this->findProofService = new ProofFinder($httpClient, $sdkConfig);
-        $this->verifyProofService = new ProofVerifier();
+        $this->findProofService = new ProofFinder($httpClient, $sdkConfig, $hashAlgorithm);
+        $this->verifyProofService = new ProofVerifier($blockchainClient, $hashAlgorithm);
 
-        $this->findMessageService = new MessageFinder($httpClient, $sdkConfig);
+        $this->findMessageService = new MessageFinder($httpClient, $sdkConfig, $hashAlgorithm);
         $this->verifyMessageService = new MessageVerifier($this->findProofService, $this->verifyProofService);
-        $this->writerMessageService = new Writer($httpClient, $sdkConfig);
+        $this->writerMessageService = new Writer($httpClient, $sdkConfig, $hashAlgorithm);
     }
-    // TODO WaitMessageReceipt
 
-    public function sendMessage(string $message, callable $resolve, callable $reject): bool
+
+    public function sendMessage(string $message, callable $resolve, callable $reject)
     {
         return $this->writerMessageService->sendMessage($message, $resolve, $reject, $this->apiKey);
     }
 
-    // TODO
     public function verifyMessage(array $messages): bool
     {
         return $this->verifyMessageService->verifyMessages($messages, $this->apiKey);
@@ -56,7 +61,6 @@ final class EnchainteClient
         return $this->findMessageService->getMessages($hashes, $this->apiKey);
     }
 
-    // TODO
     public function verifyProof(array $leaves, array $nodes, string $depth, string $bitmap): bool
     {
         return $this->verifyProofService->verifyProof($leaves, $nodes, $depth, $bitmap);
