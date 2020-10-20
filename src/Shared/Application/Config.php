@@ -13,7 +13,7 @@ class Config
     const SECRET = '1UA2dijC0SIVyrPKUKG0gT0oXxkVaMrUfJuXkLr+i0c=';
     const ENVIRONMENTS = ['PROD', 'TEST'];
     const ENVIRONMENT = 'PROD';
-    const GMT_DATETIME_FORMAT = "D, d M Y H:i:s T";
+        const GMT_DATETIME_FORMAT = "D, d M Y H:i:s T";
 
     private $httpClient;
     private $params;
@@ -21,7 +21,7 @@ class Config
     public function __construct(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
-//        $this->requestParams();
+        $this->requestParams();
     }
 
     public function params(): array
@@ -36,21 +36,24 @@ class Config
         $url = sprintf("https://%s%s", self::ENDPOINT, $path);
         $response = $this->httpClient->get($url, $headers);
 
-        $this->params = json_decode($response, true);
+        foreach ($response["items"] as $item) {
+            $this->params[$item["key"]] = $item["value"];
+        }
     }
 
     private function authHeaders(string $httpVerb, string $url, string $body): array
     {
+        $httpVerb = strtoupper($httpVerb);
         $gmtDateTime = gmdate(self::GMT_DATETIME_FORMAT);
-        $hashedContent = base64_encode(hash("sha256", $body));
-        $stringToSign = sprintf("%s\n %s\n %s; %s;%s", $httpVerb, $url, $gmtDateTime, self::ENDPOINT, $hashedContent);
-        $signature = base64_encode(hash_hmac("sha256", $stringToSign, base64_decode(self::SECRET)));
+        $hashedContent = base64_encode(hash("sha256", $body, true));
+        $stringToSign = sprintf("%s\n%s\n%s;%s;%s", $httpVerb, $url, $gmtDateTime, self::ENDPOINT, $hashedContent);
+        $signature = base64_encode(hash_hmac("sha256", $stringToSign, base64_decode(self::SECRET), true));
 
         return [
             'x-ms-date'=> $gmtDateTime,
             'x-ms-content-sha256' => $hashedContent,
             'Authorization' => sprintf(
-                "HMAC-SHA256 Credential=%sCREDENTIAL}&SignedHeaders=%s&Signature=%s",
+                "HMAC-SHA256 Credential=%s&SignedHeaders=%s&Signature=%s",
                 self::CREDENTIAL,
                 self::SIGNED_HEADERS,
                 $signature),

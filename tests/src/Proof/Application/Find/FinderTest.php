@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Enchainte\Tests\src\Proof\Application\Find;
-
 
 use Enchainte\Proof\Application\Find\Finder;
 use Enchainte\Proof\Domain\Proof;
@@ -13,9 +11,11 @@ use PHPUnit\Framework\TestCase;
 
 final class FinderTest extends TestCase
 {
-    const TOKEN = "";
-    // TODO change to bytes
-    const MESSAGES_DATA = ["123456789abcde", "123456789abcdf"];
+    const API_KEY = "uwtIk-iBhdkYjMdMgCGP0EywI4F8vsfuQjIIN7Z8mEzPpc4XbW2EfhqrxrZG2Uez";
+    const MESSAGES_DATA = [
+        [101, 110, 99, 104, 97, 105, 110, 116, 101],
+        [101, 110, 99, 104, 97, 105, 110, 116, 100]
+    ];
 
     /** @test */
     public function it_should_return_a_Proof_instance(): void
@@ -24,8 +24,8 @@ final class FinderTest extends TestCase
         $config = $this->createMock(Config::class);
         $hashAlgorithm = $this->createMock(HashAlgorithm::class);
 
-        $proofProvider = new Finder($httpClient, $config, $hashAlgorithm);
-        $proof = $proofProvider->getProof(self::MESSAGES_DATA, self::TOKEN);
+        $proofProvider = new Finder($httpClient, $config, $hashAlgorithm, self::API_KEY);
+        $proof = $proofProvider->getProof(self::MESSAGES_DATA);
 
         $this->assertInstanceOf(Proof::class, $proof);
     }

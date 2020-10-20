@@ -16,34 +16,35 @@ final class Finder
     private $httpClient;
     private $config;
     private $hashAlgorithm;
+    private $apiKey;
 
-    public function __construct(HttpClient $httpClient, Config $config, HashAlgorithm $hashAlgorithm)
+    public function __construct(HttpClient $httpClient, Config $config, HashAlgorithm $hashAlgorithm, string $apiKey)
     {
         $this->httpClient = $httpClient;
         $this->config = $config;
         $this->hashAlgorithm = $hashAlgorithm;
+        $this->apiKey = $apiKey;
     }
 
-    public function getProof(array $messages, string $token): Proof
+    public function getProof(array $bytesArray): Proof
     {
-        $hash = [];
-        foreach ($messages as $messageData) {
-            $hash[] = (new Message($messageData, $this->hashAlgorithm))->hash();
+        $hashes = [];
+        foreach ($bytesArray as $bytes) {
+            $hashes[] = (new Message($bytes, $this->hashAlgorithm))->hash();
         }
 
-        sort($hash);
+        sort($hashes);
         $url = sprintf(
             "https://%s/%s",
             $this->config->params()[self::HOST_PARAM],
             $this->config->params()[self::ENDPOINT_PARAM]
         );
         $headers = [
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . $this->apiKey,
             'Accept'        => 'application/json',
         ];
-        $data = json_encode(["hashes" => $hash]);
+        $data = json_encode(["hashes" => $hashes]);
         $response = $this->httpClient->post($url, $headers, $data);
-        $response = json_decode($response, true);
 
         return new Proof(
             $response["messages"],

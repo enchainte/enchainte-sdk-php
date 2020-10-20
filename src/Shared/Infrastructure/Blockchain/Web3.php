@@ -4,13 +4,14 @@ namespace Enchainte\Shared\Infrastructure\Blockchain;
 
 use Enchainte\Shared\Application\BlockchainClient;
 use Enchainte\Shared\Application\Config;
+use http\Env\Response;
 use Web3\Contract;
 
 class Web3 implements BlockchainClient
 {
-    const PROVIDER_HTTP_PARAM = "SDK_HTTP_PROVIDER";
-    const CONTRACT_ABI = "SDK_CONTRACT_ABI";
-    const CONTRACT_ADDRESS = "SDK_CONTRACT_ADDRESS";
+    private const PROVIDER_HTTP_PARAM = "SDK_HTTP_PROVIDER";
+    private const CONTRACT_ABI = "SDK_CONTRACT_ABI";
+    private const CONTRACT_ADDRESS = "SDK_CONTRACT_ADDRESS";
 
     private $config;
 
@@ -19,12 +20,25 @@ class Web3 implements BlockchainClient
         $this->config = $config;
     }
 
-    public function validateRoot(array $root): bool
+    public function validateRoot(string $root): bool
     {
-        $contract = new Contract($this->config[self::PROVIDER_HTTP_PARAM], $this->config[self::CONTRACT_ABI]);
+        $contract = new Contract(
+            $this->config->params()[self::PROVIDER_HTTP_PARAM],
+            $this->config->params()[self::CONTRACT_ABI]
+        );
 
-        // TODO add callback
-        $contract->at(self::CONTRACT_ADDRESS)->call("getCheckpoint", '0x' . $root);
+        $response = false;
+        $callback = function($error, $result) use (&$response) {
+            if(!empty($error) || empty($result[0])) {
+                $response = false;
+                return;
+            }
+            $response = $result[0];
+            return $response;
+        };
 
+        $contract->at($this->config->params()[self::CONTRACT_ADDRESS])->call("getCheckpoint", '0x' . $root, $callback);
+
+        return $response;
     }
 }

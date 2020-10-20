@@ -10,22 +10,24 @@ use InvalidArgumentException;
 
 final class Message
 {
-    const HASH_LENGTH = 64;
-    const HEX_REGEX = "/^[0-9a-fA-F]+$/";
-    const UNSIGNED_CHAR = "C*";
+    private const HASH_LENGTH = 64;
+    private const HEX_REGEX = "/^[0-9a-fA-F]+$/";
+    private const UNSIGNED_CHAR = "C*";
 
     private $hash;
     private $hashAlgorithm;
 
-    // TODO should receive bytes instead of hex string
-    public function __construct(string $hash, HashAlgorithm $hashAlgorithm)
+    // TODO validate that bytes is a valid byte array
+    public function __construct(array $bytes, HashAlgorithm $hashAlgorithm)
     {
         $this->hashAlgorithm = $hashAlgorithm;
 
-        $this->hash = $this->fromHex($hash);
-
+        $hash = $this->hashAlgorithm->hash($this->bytes2Hex($bytes));
+        // TODO from byte str 2 hex
+        $this->hash = bin2hex($hash);
     }
 
+    // in hex format
     public function hash(): string
     {
         return $this->hash;
@@ -37,27 +39,24 @@ final class Message
             throw new InvalidMessageException($hash);
         }
     }
-
-    // TODO
-    public function from(mixed $data)
+    private function bytes2Hex(array $bytes)
     {
+        $chars = array_map("chr", $bytes);
+        $bin = join($chars);
+        return bin2hex($bin);
     }
 
-    // TODO
-    public function fromHash()
+
+
+
+    private function hex2Bytes(string $hash): array
     {
+        return array_map('hexdec', str_split($hash, 2));
     }
 
-    private function fromHex(string $hash): string
+    private function string2Bytes(string $hash): string
     {
-//        $bytes = array_map('hexdec', str_split($hash, 2));
-        return $this->hashAlgorithm->hash($hash);
-    }
-
-    private function fromString(string $hash): string
-    {
-        $bytes = unpack(self::UNSIGNED_CHAR, $this->hash);
-        return $this->hashAlgorithm->hash($bytes);
+        return unpack(self::UNSIGNED_CHAR, $this->hash);
     }
 
     private function isHex(string $hash): bool
@@ -68,5 +67,4 @@ final class Message
         }
         return true;
     }
-
 }

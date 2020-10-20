@@ -28,7 +28,7 @@ final class Verifier
     }
 
     // verify
-    private function calculateRoot(Proof $proof): array
+    private function calculateRoot(Proof $proof): string
     {
         $leavesIteration = 0;
         $nodesIteration = 0;
@@ -61,6 +61,13 @@ final class Verifier
             $stack[] = [$actualHash, $actualDepth];
         }
 
-        return $stack[0][0];
+        return $this->bytes2Hex($stack[0][0]);
+    }
+
+    private function bytes2Hex(array $bytes): string
+    {
+        $chars = array_map("chr", $bytes);
+        $bin = join($chars);
+        return bin2hex($bin);
     }
 }

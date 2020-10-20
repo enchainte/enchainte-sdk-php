@@ -9,9 +9,9 @@ use Enchainte\Shared\Application\HttpClient;
 final class GuzzleHttpProofStub implements HttpClient
 {
 
-    public function post(string $url, array $headers, string $data)
+    public function post(string $url, array $headers, string $data): array
     {
-        return json_encode([
+        return [
             "messages" => [
                 '82aae7e86eb51f61a620831320475d9d61cbd52749dbf18fa942b1b97f50aee9',
                 '92aae7e86eb51f61a620831320475d9d61cbd52749dbf18fa942b1b97f50aee9',
@@ -22,7 +22,7 @@ final class GuzzleHttpProofStub implements HttpClient
                 ],
             "depth" => '01030302',
             "bitmap" => 'a0'
-        ]);
+        ];
     }
 
     public function get(string $url, array $headers): array

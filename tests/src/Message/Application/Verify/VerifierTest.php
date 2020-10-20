@@ -14,9 +14,11 @@ use Enchainte\Proof\Application\Verify\Verifier as ProofVerifier;
 
 final class VerifierTest extends TestCase
 {
-    const TOKEN = "";
-    // TODO change to bytes
-    const MESSAGES_DATA = ["123456789abcde", "123456789abcdf"];
+    const API_KEY = "uwtIk-iBhdkYjMdMgCGP0EywI4F8vsfuQjIIN7Z8mEzPpc4XbW2EfhqrxrZG2Uez";
+    const MESSAGES_DATA = [
+        [101, 110, 99, 104, 97, 105, 110, 116, 101],
+        [101, 110, 99, 104, 97, 105, 110, 116, 100]
+    ];
 
     /** @test */
     public function it_should_return_true_when_a_message_is_valid(): void
@@ -25,14 +27,14 @@ final class VerifierTest extends TestCase
         $config = $this->createMock(Config::class);
         $hashAlgorithm = $this->createMock(HashAlgorithm::class);
 
-        $proofFinder = new Finder($httpClient, $config, $hashAlgorithm);
+        $proofFinder = new Finder($httpClient, $config, $hashAlgorithm, self::API_KEY);
 
         $blockchainClient = new Web3SuccessfulValidationStub();
         $proofVerifier = new ProofVerifier($blockchainClient, $hashAlgorithm);
 
-        $messageVerifier = new Verifier($proofFinder, $proofVerifier);
+        $messageVerifier = new Verifier($proofFinder, $proofVerifier, self::API_KEY);
 
-        $this->assertTrue($messageVerifier->verifyMessages(self::MESSAGES_DATA, self::TOKEN));
+        $this->assertTrue($messageVerifier->verifyMessages(self::MESSAGES_DATA));
     }
 
     /** @test */
@@ -42,14 +44,14 @@ final class VerifierTest extends TestCase
         $config = $this->createMock(Config::class);
         $hashAlgorithm = $this->createMock(HashAlgorithm::class);
 
-        $proofFinder = new Finder($httpClient, $config, $hashAlgorithm);
+        $proofFinder = new Finder($httpClient, $config, $hashAlgorithm, self::API_KEY);
 
         $blockchainClient = new Web3UnsuccessfulValidationStub();
         $proofVerifier = new ProofVerifier($blockchainClient, $hashAlgorithm);
 
-        $messageVerifier = new Verifier($proofFinder, $proofVerifier);
+        $messageVerifier = new Verifier($proofFinder, $proofVerifier, self::API_KEY);
 
-        $this->assertFalse($messageVerifier->verifyMessages(self::MESSAGES_DATA, self::TOKEN));
+        $this->assertFalse($messageVerifier->verifyMessages(self::MESSAGES_DATA));
     }
 
 }

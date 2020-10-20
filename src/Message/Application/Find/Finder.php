@@ -9,32 +9,34 @@ use Enchainte\Shared\Domain\HashAlgorithm;
 
 final class Finder
 {
-    const HOST_PARAM = 'SDK_HOST';
-    const ENDPOINT_PARAM = 'SDK_FETCH_ENDPOINT';
+    private const HOST_PARAM = 'SDK_HOST';
+    private const ENDPOINT_PARAM = 'SDK_FETCH_ENDPOINT';
 
     private $httpClient;
     private $config;
     private $hashAlgorithm;
+    private $apiKey;
 
-    public function __construct(HttpClient $httpClient, Config $config, HashAlgorithm $hashAlgorithm)
+    public function __construct(HttpClient $httpClient, Config $config, HashAlgorithm $hashAlgorithm, string $apiKey)
     {
         $this->httpClient = $httpClient;
         $this->config = $config;
         $this->hashAlgorithm = $hashAlgorithm;
+        $this->apiKey = $apiKey;
     }
 
-    public function getMessages(array $messagesHash, string $token): MessageReceipt
+    public function getMessages(array $bytesArray): array
     {
         // create Message instances
         // validate each one with isValid() method
         $messages = [];
-        foreach ($messagesHash as $hash) {
-            $messages[] = new Message($hash, $this->hashAlgorithm);
+        foreach ($bytesArray as $byte) {
+            $messages[] = new Message($byte, $this->hashAlgorithm);
         }
         // stringify message array
-        $messagesHash = [];
+        $hashes = [];
         foreach ($messages as $message) {
-            $messagesHash[] = $message->hash();
+            $hashes[] = $message->hash();
         }
 
         $url = sprintf(
@@ -43,21 +45,25 @@ final class Finder
             $this->config->params()[self::ENDPOINT_PARAM]
         );
         $headers = [
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . $this->apiKey,
             'Accept'        => 'application/json',
         ];
-        $data = json_encode($messagesHash);
+        $data = json_encode($hashes);
 
-        $response = $this->httpClient->post($url, $headers, $data);
+        $responses = $this->httpClient->post($url, $headers, $data);
         // return MessageReceipt
-        $response = json_decode($response, true);
 
-        return new MessageReceipt(
-            $response["root"],
-            $response["message"],
-            $response["tx_hash"],
-            $response["status"],
-            $response["error"]
-        );
+        $messageReceipts = [];
+        foreach ($responses as $response){
+            $messageReceipts[] =  new MessageReceipt(
+                $response["root"],
+                $response["message"],
+                $response["tx_hash"],
+                $response["status"],
+                $response["error"]
+            );
+        }
+
+        return $messageReceipts;
     }
 }

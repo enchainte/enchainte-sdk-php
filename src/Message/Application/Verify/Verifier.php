@@ -9,16 +9,18 @@ final class Verifier
 {
     private $proofVerifier;
     private $proofFinder;
+    private $apiKey;
 
-    public function __construct(Finder $proofFinder, ProofVerifier $proofVerifier)
+    public function __construct(Finder $proofFinder, ProofVerifier $proofVerifier, string $apiKey)
     {
         $this->proofFinder = $proofFinder;
         $this->proofVerifier = $proofVerifier;
+        $this->apiKey = $apiKey;
     }
 
-    public function verifyMessages(array $messages, string $token): bool
+    public function verifyMessages(array $messages): bool
     {
-        $proof = $this->proofFinder->getProof($messages, $token);
+        $proof = $this->proofFinder->getProof($messages);
 
         return $this->proofVerifier->verifyProof($proof->leaves(), $proof->nodes(), $proof->depth(), $proof->bitmap());
     }

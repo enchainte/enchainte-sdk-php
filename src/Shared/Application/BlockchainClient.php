@@ -6,5 +6,5 @@ namespace Enchainte\Shared\Application;
 
 interface BlockchainClient
 {
-    public function validateRoot(array $root): bool;
+    public function validateRoot(string $root): bool;
 }

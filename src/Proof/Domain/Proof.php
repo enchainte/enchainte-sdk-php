@@ -83,7 +83,7 @@ final class Proof
         return array_map('hexdec', str_split($hexStr, 2));
     }
 
-    private function bytes2Hex(array $bytes)
+    private function bytes2Hex(array $bytes): string
     {
         $chars = array_map("chr", $bytes);
         $bin = join($chars);

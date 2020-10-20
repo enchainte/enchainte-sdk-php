@@ -7,7 +7,7 @@ use Enchainte\Shared\Application\BlockchainClient;
 final class Web3UnsuccessfulValidationStub implements BlockchainClient
 {
 
-    public function validateRoot(array $root): bool
+    public function validateRoot(string $root): bool
     {
         return false;
     }
