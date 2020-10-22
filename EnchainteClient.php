@@ -48,7 +48,7 @@ final class EnchainteClient
     }
 
 //    public function sendMessage(string $message, callable $resolve, callable $reject)
-    public function sendMessage(array $bytes)
+    public function sendMessage(array $bytes): bool
     {
         return $this->writerMessageService->sendMessage($bytes);
     }
@@ -77,6 +77,32 @@ final class EnchainteClient
     {
         return $this->findProofService->getProof($bytesArray);
     }
+
+    //helper methods
+    public function hex2Bytes(string $hash): array
+    {
+        return array_map('hexdec', str_split($hash, 2));
+    }
+
+    public function string2Bytes(string $hash): array
+    {
+        return array_values(unpack("C*", $hash));
+    }
+
+    public function bytes2String(array $bytes): string
+    {
+        $chars = array_map("chr", $bytes);
+        return  join($chars);
+    }
+
+    public function bytes2Hex(array $bytes): string
+    {
+        $chars = array_map("chr", $bytes);
+        $bin = join($chars);
+
+        return bin2hex($bin);
+    }
+
 }
 
 // TODO make utils param 2 bytes converter
