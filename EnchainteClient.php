@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Enchainte\Message\Application\Find\MessageReceipt;
 use Enchainte\Message\Application\Verify\Verifier as MessageVerifier;
@@ -63,9 +63,9 @@ final class EnchainteClient
         return $this->findMessageService->getMessages($hashes);
     }
 
-    public function waitMessageReceipt(array $hashes): array
+    public function waitMessageReceipt(array $bytesArray): array
     {
-        return $this->findMessageService->getMessages($hashes);
+        return $this->waitMessageReceiptService->waitMessageReceipt($bytesArray);
     }
 
     public function verifyProof(array $leaves, array $nodes, string $depth, string $bitmap): bool
@@ -73,8 +73,11 @@ final class EnchainteClient
         return $this->verifyProofService->verifyProof($leaves, $nodes, $depth, $bitmap);
     }
 
-    public function getProof(array $bytesArray): Proof
+    public function getProof(array $bytesArray): ?Proof
     {
         return $this->findProofService->getProof($bytesArray);
     }
 }
+
+// TODO make utils param 2 bytes converter
+// TODO cuando no encuentra lo solicitado, excepcion o null?

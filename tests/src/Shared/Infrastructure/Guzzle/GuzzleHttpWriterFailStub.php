@@ -9,10 +9,10 @@ use Enchainte\Shared\Application\HttpClient;
 final class GuzzleHttpWriterFailStub implements HttpClient
 {
 
-    public function post(string $url, array $headers, string $data): array
+    public function post(string $url, array $headers, array $data): array
     {
         return [
-          "success" => "false"
+          "success" => false
         ];
     }
 

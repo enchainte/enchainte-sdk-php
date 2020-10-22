@@ -10,7 +10,7 @@ use Enchainte\Shared\Domain\HashAlgorithm;
 final class Writer
 {
     private const HOST_PARAM = 'SDK_HOST';
-    private const ENDPOINT_PARAM = 'SDK_PROOF_ENDPOINT';
+    private const ENDPOINT_PARAM = 'SDK_WRITE_ENDPOINT';
 
     private $httpClient;
     private $config;
@@ -61,20 +61,20 @@ final class Writer
             }
 
             $url = sprintf(
-                "https://%s/%s",
+                "%s%s",
                 $this->config->params()[self::HOST_PARAM],
                 $this->config->params()[self::ENDPOINT_PARAM]
             );
             $headers = [
                 'Authorization' => 'Bearer ' . $this->apiKey,
-                'Accept'        => 'application/json',
+                'Content-Type'  => 'application/json',
             ];
             // Create new Message with messages array as argument
-            $data = json_encode(["hashes" => $hashes]);
+            $data = ["hashes" => $hashes];
             // Execute the write method of the API Service.
             $response = $this->httpClient->post($url, $headers, $data);
 
-            if ($response['success'] === "true") {
+            if ($response['success'] === true) {
                 return true;
             }
             return false;

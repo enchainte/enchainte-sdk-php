@@ -6,7 +6,7 @@ use Enchainte\Shared\Application\HttpClient;
 
 final class GuzzleHttpMessageReceiptStub implements HttpClient
 {
-    public function post(string $url, array $headers, string $data): array
+    public function post(string $url, array $headers, array $data): array
     {
         return [
             [

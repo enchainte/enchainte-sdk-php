@@ -26,7 +26,7 @@ final class Finder
         $this->apiKey = $apiKey;
     }
 
-    public function getProof(array $bytesArray): Proof
+    public function getProof(array $bytesArray): ?Proof
     {
         $hashes = [];
         foreach ($bytesArray as $bytes) {
@@ -34,20 +34,21 @@ final class Finder
         }
 
         sort($hashes);
+
         $url = sprintf(
-            "https://%s/%s",
+            "%s%s",
             $this->config->params()[self::HOST_PARAM],
             $this->config->params()[self::ENDPOINT_PARAM]
         );
         $headers = [
             'Authorization' => 'Bearer ' . $this->apiKey,
-            'Accept'        => 'application/json',
+            'Content-Type'  => 'application/json',
         ];
-        $data = json_encode(["hashes" => $hashes]);
+        $data = ["hashes" => $hashes];
         $response = $this->httpClient->post($url, $headers, $data);
 
         return new Proof(
-            $response["messages"],
+            $hashes,
             $response["nodes"],
             $response["depth"],
             $response["bitmap"],

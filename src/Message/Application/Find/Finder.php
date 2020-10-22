@@ -40,21 +40,21 @@ final class Finder
         }
 
         $url = sprintf(
-            "https://%s/%s",
+            "%s%s",
             $this->config->params()[self::HOST_PARAM],
             $this->config->params()[self::ENDPOINT_PARAM]
         );
         $headers = [
             'Authorization' => 'Bearer ' . $this->apiKey,
-            'Accept'        => 'application/json',
+            'Content-Type'  => 'application/json',
         ];
-        $data = json_encode($hashes);
+        $data = ["hashes" => $hashes];
 
         $responses = $this->httpClient->post($url, $headers, $data);
-        // return MessageReceipt
 
         $messageReceipts = [];
         foreach ($responses as $response){
+
             $messageReceipts[] =  new MessageReceipt(
                 $response["root"],
                 $response["message"],

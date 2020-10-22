@@ -70,11 +70,12 @@ final class Proof
         return $this->hex2bytes($this->bitmap);
     }
 
-    public function mergeLeavesAndHash(array $leave1, array $leave2): array
+    public function mergeLeavesAndHash(?array $leave1, ?array $leave2): array
     {
-        $leave1 = $this->bytes2Hex($leave1);
-        $leave2 = $this->bytes2Hex($leave2);
+        $leave1 = $this->bytes2String($leave1);
+        $leave2 =  $this->bytes2String($leave2);
         $hash = bin2hex($this->hashAlgorithm->hash($leave1 . $leave2));
+
         return $this->hex2bytes($hash);
     }
 
@@ -83,10 +84,20 @@ final class Proof
         return array_map('hexdec', str_split($hexStr, 2));
     }
 
-    private function bytes2Hex(array $bytes): string
+    private function bytes2String(array $bytes): string
     {
         $chars = array_map("chr", $bytes);
+        return  join($chars);
+    }
+
+    private function bytes2Hex(array $bytes): string
+    {
+        if (empty($bytes)) {
+            return "";
+        }
+        $chars = array_map("chr", $bytes);
         $bin = join($chars);
+
         return bin2hex($bin);
     }
 }

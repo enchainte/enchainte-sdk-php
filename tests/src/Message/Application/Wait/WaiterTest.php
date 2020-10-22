@@ -15,7 +15,9 @@ class WaiterTest extends TestCase
 {
     const API_KEY = "";
 
-    /** @test */
+    /** @test
+     * @group unit
+     */
     public function it_should_return_an_array_of_MessageReceipts_when_search_is_completed(): void
     {
         $httpClient = new GuzzleHttpMessageReceiptStub();
@@ -34,4 +36,6 @@ class WaiterTest extends TestCase
         $this->assertIsArray($messageReceipts);
         $this->assertContainsOnlyInstancesOf(MessageReceipt::class, $messageReceipts);
     }
+
+
 }

@@ -20,8 +20,10 @@ final class VerifierTest extends TestCase
         [101, 110, 99, 104, 97, 105, 110, 116, 100]
     ];
 
-    /** @test */
-    public function it_should_return_true_when_a_message_is_valid(): void
+    /** @test
+     * @group unit
+     */
+    public function it_should_return_true_when_a_root_is_found_in_web3(): void
     {
         $httpClient = new GuzzleHttpProofStub();
         $config = $this->createMock(Config::class);
@@ -37,8 +39,10 @@ final class VerifierTest extends TestCase
         $this->assertTrue($messageVerifier->verifyMessages(self::MESSAGES_DATA));
     }
 
-    /** @test */
-    public function it_should_return_false_when_a_message_is_valid(): void
+    /** @test
+     * @group unit
+     */
+    public function it_should_return_false_when_a_root_is_not_found_in_web3(): void
     {
         $httpClient = new GuzzleHttpProofStub();
         $config = $this->createMock(Config::class);

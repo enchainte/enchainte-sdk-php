@@ -13,7 +13,9 @@ final class WriterTest extends TestCase
 {
     const API_KEY = "uwtIk-iBhdkYjMdMgCGP0EywI4F8vsfuQjIIN7Z8mEzPpc4XbW2EfhqrxrZG2Uez";
 
-    /** @test */
+    /** @test
+     * @group unit
+     */
     public function it_should_successfully_write_a_message(): void
     {
         $httpClient = new GuzzleHttpWriterSuccessStub();
@@ -26,8 +28,10 @@ final class WriterTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /** @test */
-    public function it_should_fail_write_a_message(): void
+    /** @test
+     * @group unit
+     */
+    public function it_should_fail_to_write_a_message(): void
     {
         $httpClient = new GuzzleHttpWriterFailStub();
         $config = $this->createMock(Config::class);

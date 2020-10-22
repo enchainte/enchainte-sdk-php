@@ -12,7 +12,6 @@ final class Waiter
     private const WAIT_MESSAGE_INTERVAL_FACTOR = "SDK_WAIT_MESSAGE_INTERVAL_FACTOR";
 
     private $messageFinder;
-    private $hashAlgorithm;
     private $config;
 
     public function __construct(Finder $messageFinder, Config $config)

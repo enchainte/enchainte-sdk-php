@@ -8,7 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 final class MessageTest extends TestCase
 {
-    /** @test  */
+    /** @test
+     * @group unit
+     */
     public function it_should_create_a_Message_instance(): void
     {
         $hashAlgorithm = $this->createMock(HashAlgorithm::class);
@@ -18,7 +20,7 @@ final class MessageTest extends TestCase
     }
 
     /** @test
-     * @group fail
+     * @group unit
      */
     public function it_should_return_the_hash_property(): void
     {
