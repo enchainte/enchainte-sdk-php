@@ -5,7 +5,7 @@ namespace Enchainte\Tests\src\Message\Application\Verify;
 use Enchainte\Message\Application\Verify\Verifier;
 use Enchainte\Proof\Application\Find\Finder;
 use Enchainte\Shared\Application\Config;
-use Enchainte\Shared\Domain\HashAlgorithm;
+use Enchainte\Shared\Infrastructure\Hashing\Blake2b;
 use Enchainte\Tests\src\Shared\Infrastructure\Guzzle\GuzzleHttpProofStub;
 use Enchainte\Tests\src\Shared\Infrastructure\Web3\Web3SuccessfulValidationStub;
 use Enchainte\Tests\src\Shared\Infrastructure\Web3\Web3UnsuccessfulValidationStub;
@@ -27,7 +27,7 @@ final class VerifierTest extends TestCase
     {
         $httpClient = new GuzzleHttpProofStub();
         $config = $this->createMock(Config::class);
-        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
+        $hashAlgorithm = new Blake2b();
 
         $proofFinder = new Finder($httpClient, $config, $hashAlgorithm, self::API_KEY);
 
@@ -46,7 +46,7 @@ final class VerifierTest extends TestCase
     {
         $httpClient = new GuzzleHttpProofStub();
         $config = $this->createMock(Config::class);
-        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
+        $hashAlgorithm = new Blake2b();
 
         $proofFinder = new Finder($httpClient, $config, $hashAlgorithm, self::API_KEY);
 

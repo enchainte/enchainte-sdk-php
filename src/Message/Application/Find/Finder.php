@@ -30,8 +30,8 @@ final class Finder
         // create Message instances
         // validate each one with isValid() method
         $messages = [];
-        foreach ($bytesArray as $byte) {
-            $messages[] = new Message($byte, $this->hashAlgorithm);
+        foreach ($bytesArray as $bytes) {
+            $messages[] = new Message($bytes, $this->hashAlgorithm);
         }
         // stringify message array
         $hashes = [];

@@ -2,10 +2,14 @@
 
 namespace Enchainte\Proof\Domain;
 
+use Enchainte\Proof\Domain\Exception\InvalidProofArgumentException;
 use Enchainte\Shared\Domain\HashAlgorithm;
 
 final class Proof
 {
+    private const HASH_LENGTH = 64;
+    private const HEX_REGEX = "/^[0-9a-fA-F]+$/";
+
     private $leaves;
     private $nodes;
     private $depth;
@@ -14,6 +18,11 @@ final class Proof
 
     public function __construct(array $leaves, array $nodes, string $depth, string $bitmap, HashAlgorithm $hashAlgorithm)
     {
+        $this->areValid($leaves);
+        $this->areValid($nodes);
+        $this->isValid($depth);
+        $this->isValid($bitmap);
+
         $this->leaves = $leaves;
         $this->nodes = $nodes;
         $this->depth = $depth;
@@ -90,14 +99,29 @@ final class Proof
         return  join($chars);
     }
 
-    private function bytes2Hex(array $bytes): string
+    private function areValid($values): void
     {
-        if (empty($bytes)) {
-            return "";
+        foreach ($values as $value) {
+            if (!$this->isHex($value) || strlen($value) !== self::HASH_LENGTH) {
+                throw new InvalidProofArgumentException();
+            }
         }
-        $chars = array_map("chr", $bytes);
-        $bin = join($chars);
+    }
 
-        return bin2hex($bin);
+    private function isValid($value): void
+    {
+        if (!$this->isHex($value)) {
+            throw new InvalidProofArgumentException();
+        }
+    }
+
+
+    private function isHex(string $hash): bool
+    {
+        $regexResult = preg_match(self::HEX_REGEX, $hash);
+        if ($regexResult !== 1){
+            return false;
+        }
+        return true;
     }
 }

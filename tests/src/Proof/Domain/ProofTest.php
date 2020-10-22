@@ -2,6 +2,7 @@
 
 namespace Enchainte\Tests\src\Proof\Domain;
 
+use Enchainte\Proof\Domain\Exception\InvalidProofArgumentException;
 use Enchainte\Proof\Domain\Proof;
 use Enchainte\Shared\Domain\HashAlgorithm;
 use Enchainte\Shared\Infrastructure\Hashing\Blake2b;
@@ -52,6 +53,30 @@ final class ProofTest extends TestCase
         $this->assertEquals($proof->nodes(), $nodes);
         $this->assertEquals($proof->depth(), $depth);
         $this->assertEquals($proof->bitmap(), $bitmap);
+    }
+
+    /** @test
+     * @group unit
+     */
+    public function it_should_return_aan_exception_when_an_invalid_argument_is_provided(): void
+    {
+        $this->expectException(InvalidProofArgumentException::class);
+        $hashAlgorithm = $this->createMock(HashAlgorithm::class);
+
+        $leaves = [
+            '5ac706bdef87529b22c08646b74cb98baf310a46bd21ee420814b04c71fa4zzz',
+            '5cd53f8367e1892c4f25dc9b5ddf28c7a1a27f489336a9537a43555819e4f434',
+        ];
+        $nodes = [
+            '95be11f4984e0b6e15f100e4eb4476d54a716f47bfdbd606f85367f3867e9836',
+            '9b6c0696bc6c51d6f99b8fdc949c06eaaa0b6af7bee2564d04708e5dc2e262d8',
+            '5ac607f2a9ee295d8401e913478b8e04a729ddcca14a3a84c76fc2ae9105e6cf',
+        ];
+        $depth = "02080c0d1012141413110f0e0b0a0907060504030100";
+        $bitmap = "020000";
+
+        $proof = new Proof($leaves, $nodes, $depth, $bitmap, $hashAlgorithm);
+
     }
 
     /** @test

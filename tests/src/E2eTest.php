@@ -34,12 +34,10 @@ final class E2eTest extends TestCase
             $proof = $sdk->getProof([$bytes]);
 
             $valid = false;
-            $it = 0;
 
             while (!$valid) {
-                $valid = $sdk->verifyProof($proof->leaves(), $proof->nodes(), $proof->depth(), $proof->bitmap());
+                $valid = $sdk->verifyProof($proof["leaves"], $proof["nodes"], $proof["depth"], $proof["bitmap"]);
                 usleep(500);
-                $it++;
             }
             $this->assertTrue(true);
         }catch (Exception $e) {

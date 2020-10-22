@@ -73,7 +73,7 @@ final class EnchainteClient
         return $this->verifyProofService->verifyProof($leaves, $nodes, $depth, $bitmap);
     }
 
-    public function getProof(array $bytesArray): ?Proof
+    public function getProof(array $bytesArray): ?array
     {
         return $this->findProofService->getProof($bytesArray);
     }

@@ -31,7 +31,7 @@ final class FinderTest extends TestCase
         $proofProvider = new Finder($httpClient, $config, $hashAlgorithm, self::API_KEY);
         $proof = $proofProvider->getProof(self::MESSAGES_DATA);
 
-        $this->assertInstanceOf(Proof::class, $proof);
+        $this->assertIsArray($proof);
     }
 
     /** @test

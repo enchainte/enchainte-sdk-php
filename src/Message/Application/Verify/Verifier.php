@@ -22,6 +22,6 @@ final class Verifier
     {
         $proof = $this->proofFinder->getProof($messages);
 
-        return $this->proofVerifier->verifyProof($proof->leaves(), $proof->nodes(), $proof->depth(), $proof->bitmap());
+        return $this->proofVerifier->verifyProof($proof["leaves"], $proof["nodes"], $proof["depth"], $proof["bitmap"]);
     }
 }
