@@ -175,6 +175,7 @@ function generateRandomString() {
 }
 
 try {
+    $apiKey = getenv("API_KEY");
     $sdkClient = new EnchainteClient("apiKey");
 
     $randomString = $this->generateRandomString();
@@ -199,7 +200,7 @@ try {
         usleep(500);
     }
     
-}catch (Exception $e) {
+} catch (Exception $e) {
     echo $e->getMessage();
 }
 ```
