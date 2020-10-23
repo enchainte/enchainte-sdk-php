@@ -1,6 +1,6 @@
 {
-    "name": "enchainte/phpsdk",
-    "description": "PHP implementation for enchainte SDK",
+    "name": "enchainte/sdk",
+    "description": "PHP implementation for Enchainte SDK",
     "type": "library",
     "authors": [
         {
@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "php": "^7.2",
         "guzzlehttp/guzzle": "^6.5.5",
         "deemru/blake2b": "^1.0",
         "sc0vu/web3.php": "dev-master",
