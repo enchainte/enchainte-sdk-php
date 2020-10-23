@@ -4,8 +4,6 @@ namespace Enchainte\Message\Domain;
 
 use Enchainte\Message\Domain\Exception\InvalidMessageArgumentException;
 use Enchainte\Shared\Domain\HashAlgorithm;
-use Enchainte\Shared\Infrastructure\Hashing\Blake2b;
-use InvalidArgumentException;
 
 
 final class Message

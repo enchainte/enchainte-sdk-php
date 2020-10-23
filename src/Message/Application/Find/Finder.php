@@ -27,13 +27,11 @@ final class Finder
 
     public function getMessages(array $bytesArray): array
     {
-        // create Message instances
-        // validate each one with isValid() method
         $messages = [];
         foreach ($bytesArray as $bytes) {
             $messages[] = new Message($bytes, $this->hashAlgorithm);
         }
-        // stringify message array
+
         $hashes = [];
         foreach ($messages as $message) {
             $hashes[] = $message->hash();

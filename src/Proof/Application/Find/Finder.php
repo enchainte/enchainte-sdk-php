@@ -4,7 +4,6 @@ namespace Enchainte\Proof\Application\Find;
 
 use Enchainte\Shared\Application\Config;
 use Enchainte\Message\Domain\Message;
-use Enchainte\Proof\Domain\Proof;
 use Enchainte\Shared\Application\HttpClient;
 use Enchainte\Shared\Domain\HashAlgorithm;
 

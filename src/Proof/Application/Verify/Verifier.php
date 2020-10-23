@@ -20,9 +20,8 @@ final class Verifier
     public function verifyProof(array $leaves, array $nodes, string $depth, string $bitmap): bool
     {
         $root = $this->calculateRoot(new Proof($leaves, $nodes, $depth, $bitmap, $this->hashAlgorithm));
-        // Call validateRoot from Web3 Service with the root attribute of the proof
+
         return $this->blockchainClient->validateRoot($root);
-        // If both executions return true, the proof is valid, otherwise, it’s not
     }
 
     public function calculateRoot(Proof $proof): string
@@ -48,7 +47,7 @@ final class Verifier
                 if (!$lastHash) {
                     throw new \Exception("Verify: Stack got empty before capturing its value");
                 }
-                $actualHash = $proof->mergeLeavesAndHash($lastHash[0], $actualHash);
+                $actualHash = $proof->mergeAndHash($lastHash[0], $actualHash);
 
                 $actualDepth -= 1;
             }

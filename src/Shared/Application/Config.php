@@ -6,14 +6,13 @@ use InvalidArgumentException;
 
 class Config
 {
-    // TODO get from params or .env
     const SIGNED_HEADERS = 'x-ms-date;host;x-ms-content-sha256';
     const ENDPOINT = 'enchainte-config.azconfig.io';
     const CREDENTIAL = 'ihs8-l9-s0:JPRPUeiXJGsAzFiW9WDc';
     const SECRET = '1UA2dijC0SIVyrPKUKG0gT0oXxkVaMrUfJuXkLr+i0c=';
     const ENVIRONMENTS = ['PROD', 'TEST'];
     const ENVIRONMENT = 'PROD';
-        const GMT_DATETIME_FORMAT = "D, d M Y H:i:s T";
+    const GMT_DATETIME_FORMAT = "D, d M Y H:i:s T";
 
     private $httpClient;
     private $params;

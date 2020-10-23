@@ -172,7 +172,7 @@ final class ProofTest extends TestCase
             41, 169, 88, 61, 47, 184, 166, 183, 158, 226, 117, 103, 161, 148, 180, 169, 169, 229, 139, 130, 200, 82, 155, 40, 222, 223, 90, 82, 250, 44, 187, 25,
         ];
 
-        $result = $proof->mergeLeavesAndHash($leave1, $leave2);
+        $result = $proof->mergeAndHash($leave1, $leave2);
 
         $this->assertEquals($expectedResult, $result);
     }

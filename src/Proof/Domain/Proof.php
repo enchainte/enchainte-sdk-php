@@ -79,11 +79,11 @@ final class Proof
         return $this->hex2bytes($this->bitmap);
     }
 
-    public function mergeLeavesAndHash(?array $leave1, ?array $leave2): array
+    public function mergeAndHash(?array $bytes1, ?array $bytes2): array
     {
-        $leave1 = $this->bytes2String($leave1);
-        $leave2 =  $this->bytes2String($leave2);
-        $hash = bin2hex($this->hashAlgorithm->hash($leave1 . $leave2));
+        $bytes1 = $this->bytes2String($bytes1);
+        $bytes2 =  $this->bytes2String($bytes2);
+        $hash = bin2hex($this->hashAlgorithm->hash($bytes1 . $bytes2));
 
         return $this->hex2bytes($hash);
     }

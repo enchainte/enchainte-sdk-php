@@ -4,7 +4,6 @@ namespace Enchainte\Shared\Infrastructure\Blockchain;
 
 use Enchainte\Shared\Application\BlockchainClient;
 use Enchainte\Shared\Application\Config;
-use http\Env\Response;
 use Web3\Contract;
 
 class Web3 implements BlockchainClient

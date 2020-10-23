@@ -6,7 +6,6 @@ use Enchainte\Shared\Application\HttpClient;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\ClientException;
 
 final class GuzzleHttp implements HttpClient
 {
@@ -26,7 +25,6 @@ final class GuzzleHttp implements HttpClient
             ]);
 
         } catch (BadResponseException $exception) {
-//            throw new Exception($exception->getMessage());
             $response = $exception->getResponse();
             $jsonResponse = (string) $response->getBody();
             throw new Exception($jsonResponse);
@@ -46,7 +44,6 @@ final class GuzzleHttp implements HttpClient
         } catch (BadResponseException $exception) {
             $response = $exception->getResponse();
             $jsonResponse = (string) $response->getBody();
-//            $msg = sprintf("error during request to %s: %s\n",$url, $exception->getMessage());
             throw new Exception($jsonResponse);
         }
 
