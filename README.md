@@ -22,7 +22,7 @@ The following examples summarize how to access the different functionalities ava
 
 ### Prepare data
 
-In order to interact with the SDK, the data should be converted to bytes. The SDK provides the basic method to do so.
+In order to interact with the SDK, the data should be converted to bytes. The SDK provides the basic methods to do so.
 
 
 ```php
