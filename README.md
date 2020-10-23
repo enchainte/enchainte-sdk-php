@@ -31,7 +31,8 @@ In order to interact with the SDK, the data should be converted to bytes. The SD
 use EnchainteClient;
 
 try {
-    $sdkClient = new EnchainteClient("<apiKey>");
+    // you need an api key to get access to the sdk functionality
+    $sdkClient = new EnchainteClient("apiKey");
     // convert data to bytes
     
     // from string to bytes
@@ -63,7 +64,7 @@ use EnchainteClient;
 use Exception;
 
 try {
-    $sdkClient = new EnchainteClient("<apiKey>");
+    $sdkClient = new EnchainteClient("apiKey");
     
     $bytesData = $sdkClient->string2Bytes("Example data");
     $sdkClient->sendMessage($bytesData);
@@ -84,7 +85,7 @@ use EnchainteClient;
 use Exception;
 
 try {
-    $sdkClient = new EnchainteClient("<apiKey>");
+    $sdkClient = new EnchainteClient("apiKey");
     
     $messages = [
         $sdkClient->string2Bytes("Example data 1"),
@@ -109,7 +110,7 @@ use EnchainteClient;
 use Exception;
 
 try {
-    $sdkClient = new EnchainteClient("<apiKey>");
+    $sdkClient = new EnchainteClient("apiKey");
     
     $message1 = $sdkClient->string2Bytes("Example data 1");
     $message2 = $sdkClient->string2Bytes("Example data 2");
@@ -136,7 +137,7 @@ use EnchainteClient;
 use Exception;
 
 try {
-    $sdkClient = new EnchainteClient("<apiKey>");
+    $sdkClient = new EnchainteClient("apiKey");
     
     $messages = [
         $sdkClient->string2Bytes("Example data 1"),
